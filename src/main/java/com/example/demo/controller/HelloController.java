@@ -2,39 +2,35 @@ package com.example.demo.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.bind.annotation.*;
+import org.apache.http.client.utils.URIBuilder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 @RestController
 @RequestMapping(path = "/api")
 public class HelloController {
 
-    String appid = "dj00aiZpPTBwNlVmQ1FnSFB4aCZzPWNvbnN1bWVyc2VjcmV0Jng9ZTY-";
-    String apiSample = "http://shopping.yahooapis.jp/ShoppingWebService/V1/itemSearch?appid=dj00aiZpPTBwNlVmQ1FnSFB4aCZzPWNvbnN1bWVyc2VjcmV0Jng9ZTY-&query=%E8%AE%83%E5%B2%90%E3%81%86%E3%81%A9%E3%82%93";
-    String api = "";
-    String query = "%E8%AE%83%E5%B2%90%E3%81%86%E3%81%A9%E3%82%93";
-    String callback = "json";
-
+    String baseUrl = "https://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch";
+    URL url;
 
     @RequestMapping(method = RequestMethod.GET)
-    public JsonNode getCustomer(@RequestParam("name") String name) throws IOException {
-        JsonNode root = null;
-        try {
-            api += "http://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch?";
-            api += "appid=" + appid;
-            api += "&query=" + query;
-            api += "&callback=" + callback;
+    public JsonNode getCustomer(@RequestParam("name") String name) throws IOException, URISyntaxException {
 
-            System.out.println(api);
-            System.out.println(name);
+        ObjectMapper mapper = new ObjectMapper();
 
-            ObjectMapper mapper = new ObjectMapper();
-            root = mapper.readTree(api);
+        url = new URIBuilder(baseUrl)
+                .setParameter("appid", "dj00aiZpPTBwNlVmQ1FnSFB4aCZzPWNvbnN1bWVyc2VjcmV0Jng9ZTY-")
+                .setParameter("query", "%E8%AE%83%E5%B2%90%E3%81%86%E3%81%A9%E3%82%93")
+                .build().toURL();
 
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        JsonNode root = mapper.readTree(url);
+
         return root;
     }
 }
