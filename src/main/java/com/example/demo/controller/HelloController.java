@@ -20,17 +20,19 @@ public class HelloController {
     URL url;
 
     @RequestMapping(method = RequestMethod.GET)
-    public JsonNode getCustomer(@RequestParam("name") String name) throws IOException, URISyntaxException {
+    public int getCustomer(@RequestParam("query") String query) throws IOException, URISyntaxException {
 
         ObjectMapper mapper = new ObjectMapper();
 
         url = new URIBuilder(baseUrl)
                 .setParameter("appid", "dj00aiZpPTBwNlVmQ1FnSFB4aCZzPWNvbnN1bWVyc2VjcmV0Jng9ZTY-")
-                .setParameter("query", "%E8%AE%83%E5%B2%90%E3%81%86%E3%81%A9%E3%82%93")
+                .setParameter("query", query)
                 .build().toURL();
 
         JsonNode root = mapper.readTree(url);
+        System.out.println(root);
+        int totalResultsAvailable = root.get("ResultSet").get("totalResultsAvailable").asInt();
 
-        return root;
+        return totalResultsAvailable;
     }
 }
