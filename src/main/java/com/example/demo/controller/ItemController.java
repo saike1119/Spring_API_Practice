@@ -14,13 +14,13 @@ import java.net.URL;
 
 @RestController
 @RequestMapping(path = "/api")
-public class HelloController {
+public class ItemController {
 
     String baseUrl = "https://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch";
     URL url;
 
     @RequestMapping(method = RequestMethod.GET)
-    public int getCustomer(@RequestParam("query") String query) throws IOException, URISyntaxException {
+    public JsonNode getCustomer(@RequestParam("query") String query) throws IOException, URISyntaxException {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -31,8 +31,12 @@ public class HelloController {
 
         JsonNode root = mapper.readTree(url);
         System.out.println(root);
-        int totalResultsAvailable = root.get("ResultSet").get("totalResultsAvailable").asInt();
+        JsonNode result = root.get("ResultSet").get("0").get("Result");
 
-        return totalResultsAvailable;
+        for (JsonNode x : result) {
+
+        }
+
+        return result;
     }
 }
