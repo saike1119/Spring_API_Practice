@@ -14,14 +14,15 @@ import java.util.List;
 @Repository
 public class ItemRepository {
 
-    List<JsonNode> itemList = new ArrayList<>();
+    List<String> itemList = new ArrayList<String>();
 
     String baseUrl = "https://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch";
     URL url;
 
-    public JsonNode getItem(String query) throws URISyntaxException, IOException {
+    public List<String> getItem(String query) throws URISyntaxException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
+        String y = null;
 
         //APIを叩くURLを作成
         url = new URIBuilder(baseUrl)
@@ -31,8 +32,13 @@ public class ItemRepository {
 
         JsonNode root = mapper.readTree(url);
         System.out.println(root);
-        JsonNode result = root.get("ResultSet").get("0").get("Result").get("0").get("Name");
+        JsonNode result = root.get("ResultSet").get("0").get("Result");
 
-        return result;
+        for (int i = 0;i<10;i++){
+            itemList.add(result.get(String.valueOf(i)).get("Name").toString());
+
+        }
+
+        return itemList;
     }
 }
