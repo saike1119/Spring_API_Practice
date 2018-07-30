@@ -8,9 +8,13 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class ItemRepository {
+
+    List<JsonNode> itemList = new ArrayList<>();
 
     String baseUrl = "https://shopping.yahooapis.jp/ShoppingWebService/V1/json/itemSearch";
     URL url;
@@ -27,7 +31,7 @@ public class ItemRepository {
 
         JsonNode root = mapper.readTree(url);
         System.out.println(root);
-        JsonNode result = root.get("ResultSet").get("0").get("Result");
+        JsonNode result = root.get("ResultSet").get("0").get("Result").get("0").get("Name");
 
         return result;
     }
