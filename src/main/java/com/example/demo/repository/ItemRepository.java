@@ -34,9 +34,8 @@ public class ItemRepository {
         System.out.println(root);
         JsonNode result = root.get("ResultSet").get("0").get("Result");
 
-        for (int i = 0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             itemList.add(result.get(String.valueOf(i)).get("Name").toString());
-
         }
 
         return itemList;
